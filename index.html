@@ -12,6 +12,37 @@
   </script>
   <div id="console"></div>
   </script>
+
+
+    <button id="loadButton">Load File</button>
+    <div id="displayText"></div>
+
+    <script>
+        const loadButton = document.getElementById('loadButton');
+        const displayTextElement = document.getElementById('displayText');
+
+        // Add an event listener to the button
+        loadButton.addEventListener('click', async () => {
+            try {
+                // Use the Fetch API to load the "babycat.html" file
+                const response = await fetch('babycat.html');
+
+                if (!response.ok) {
+                    throw new Error('Failed to load the file');
+                }
+
+                // Read the contents of the file as text
+                const fileText = await response.text();
+
+                // Display the file contents in the div element
+                displayTextElement.innerHTML = fileText;
+            } catch (error) {
+                console.error(error);
+                displayTextElement.innerHTML = 'Error loading the file.';
+            }
+        });
+    </script>
+  
 </body>
 
 </html>
