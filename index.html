@@ -14,34 +14,47 @@
   </script>
 
 
-    <button id="loadButton">Load File</button>
-    <div id="displayText"></div>
+
+    <div id="displayText">hachikohax@technovoid:~>$ cat babycathax.png</div>
+    <textarea id="inputText" rows="4" cols="50" placeholder="Press Enter to load babycat.html"></textarea>
+    <div id="fileDisplay"></div>
 
     <script>
-        const loadButton = document.getElementById('loadButton');
+        const inputTextElement = document.getElementById('inputText');
         const displayTextElement = document.getElementById('displayText');
+        const fileDisplayElement = document.getElementById('fileDisplay');
 
-        // Add an event listener to the button
-        loadButton.addEventListener('click', async () => {
-            try {
-                // Use the Fetch API to load the "babycat.html" file
-                const response = await fetch('babycat.html');
+        // Function to hide the displayText after 2 seconds
+        setTimeout(() => {
+            displayTextElement.style.display = 'none';
+        }, 2000);
 
-                if (!response.ok) {
-                    throw new Error('Failed to load the file');
+        // Add an event listener to the textarea for Enter key press
+        inputTextElement.addEventListener('keydown', async (event) => {
+            // Check if the Enter key (keyCode 13) is pressed
+            if (event.keyCode === 13) {
+                try {
+                    // Use the Fetch API to load the "babycat.html" file
+                    const response = await fetch('babycat.html');
+
+                    if (!response.ok) {
+                        throw new Error('Failed to load the file');
+                    }
+
+                    // Read the contents of the file as text
+                    const fileText = await response.text();
+
+                    // Display the file contents in the fileDisplayElement
+                    fileDisplayElement.innerHTML = fileText;
+                } catch (error) {
+                    console.error(error);
+                    fileDisplayElement.innerHTML = 'Error loading the file.';
                 }
-
-                // Read the contents of the file as text
-                const fileText = await response.text();
-
-                // Display the file contents in the div element
-                displayTextElement.innerHTML = fileText;
-            } catch (error) {
-                console.error(error);
-                displayTextElement.innerHTML = 'Error loading the file.';
             }
         });
     </script>
+
+
   
 </body>
 
