@@ -14,47 +14,46 @@
   </script>
 
 
-
-    <div id="displayText">hachikohax@technovoid:~>$ cat babycathax.png</div>
-    <textarea id="inputText" rows="4" cols="50" placeholder="Press Enter to load babycat.html"></textarea>
+    <div id="displayText">hachikohax@technovoid:~><span class="green-text">$</span> <span class="white-text">cat babycathax.png</span></div>
     <div id="fileDisplay"></div>
 
     <script>
-        const inputTextElement = document.getElementById('inputText');
         const displayTextElement = document.getElementById('displayText');
         const fileDisplayElement = document.getElementById('fileDisplay');
 
-        // Function to hide the displayText after 2 seconds
-        setTimeout(() => {
-            displayTextElement.style.display = 'none';
-        }, 2000);
+        // Function to display the text and load the file
+        function displayTextAndLoadFile() {
+            displayTextElement.style.display = 'none'; // Hide the initial text
 
-        // Add an event listener to the textarea for Enter key press
-        inputTextElement.addEventListener('keydown', async (event) => {
-            // Check if the Enter key (keyCode 13) is pressed
-            if (event.keyCode === 13) {
-                try {
-                    // Use the Fetch API to load the "babycat.html" file
-                    const response = await fetch('babycat.html');
-
+            // Load the "babycat.html" file
+            fetch('babycat.html')
+                .then(response => {
                     if (!response.ok) {
                         throw new Error('Failed to load the file');
                     }
-
-                    // Read the contents of the file as text
-                    const fileText = await response.text();
-
+                    return response.text();
+                })
+                .then(fileText => {
                     // Display the file contents in the fileDisplayElement
                     fileDisplayElement.innerHTML = fileText;
-                } catch (error) {
+                })
+                .catch(error => {
                     console.error(error);
                     fileDisplayElement.innerHTML = 'Error loading the file.';
-                }
+                });
+        }
+
+        // Add an event listener to the entire document for Enter key press
+        document.addEventListener('keydown', (event) => {
+            // Check if the Enter key (keyCode 13) is pressed
+            if (event.keyCode === 13) {
+                displayTextAndLoadFile();
             }
         });
+
+        // Initially, display the text for 2 seconds
+        setTimeout(displayTextAndLoadFile, 2000);
     </script>
-
-
   
 </body>
 
