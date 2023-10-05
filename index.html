@@ -35,42 +35,53 @@
     <div id="displayText">hachikohax@technovoid:~><span class="green-text">$</span> <span class="white-text">cat babycathax.png</span></div>
     <div id="fileDisplay"></div>
 
-    <script>
-        const displayTextElement = document.getElementById('displayText');
-        const fileDisplayElement = document.getElementById('fileDisplay');
+<script>
+    const displayTextElement = document.getElementById('displayText');
+    const fileDisplayElement = document.getElementById('fileDisplay');
 
-        // Function to display the text and load the file
-        function displayTextAndLoadFile() {
-            displayTextElement.style.display = 'none'; // Hide the initial text
+    // Function to display the text and load the file
+    function displayTextAndLoadFile() {
+        displayTextElement.style.display = 'none'; // Hide the initial text
 
-            // Load the "babycat.html" file
-            fetch('babycat.html')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Failed to load the file');
-                    }
-                    return response.text();
-                })
-                .then(fileText => {
-                    // Display the file contents in the fileDisplayElement
-                    fileDisplayElement.innerHTML = fileText;
-                })
-                .catch(error => {
-                    console.error(error);
-                    fileDisplayElement.innerHTML = 'Error loading the file.';
-                });
+        // Load the "babycat.html" file
+        fetch('babycat.html')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to load the file');
+                }
+                return response.text();
+            })
+            .then(fileText => {
+                // Display the file contents in the fileDisplayElement
+                fileDisplayElement.innerHTML = fileText;
+            })
+            .catch(error => {
+                console.error(error);
+                fileDisplayElement.innerHTML = 'Error loading the file.';
+            });
+    }
+
+    // Function to handle user action (touch or Enter key)
+    function handleUserAction() {
+        displayTextAndLoadFile();
+    }
+
+    // Add an event listener to the entire document for Enter key press
+    document.addEventListener('keydown', (event) => {
+        // Check if the Enter key (keyCode 13) is pressed
+        if (event.keyCode === 13) {
+            handleUserAction();
         }
+    });
 
-        // Add an event listener to the entire document for Enter key press
-        document.addEventListener('keydown', (event) => {
-            // Check if the Enter key (keyCode 13) is pressed
-            if (event.keyCode === 13) {
-                displayTextAndLoadFile();
-            }
-        });
-    </script>
+    // Add event listeners for touch events
+    document.addEventListener("touchstart", (event) => {
+        handleUserAction();
+    });
 
-  
+    ontouchstart = (event) => {
+        handleUserAction();
+    };
+</script>
 </body>
-
 </html>
