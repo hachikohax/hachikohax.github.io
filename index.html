@@ -1,21 +1,24 @@
 <html>
 
 <head>
-  <title>hachikohax</title>
-  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
-  <link rel="stylesheet" type="text/css" href="assets/css/index.css">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <style>
+    <title>hachikohax</title>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="assets/css/index.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
         #displayText {
             display: none;
             text-align: center; /* Center the text */
         }
+
         .green-text {
             color: green;
         }
+
         .white-text {
             color: white;
         }
+
         #fileDisplay {
             border: none; /* Remove any borders */
             text-align: center; /* Center the content */
@@ -26,62 +29,69 @@
 </head>
 
 <body>
-  <script type="text/javascript" src="assets/js/index.js">
-  </script>
-  <div id="console"></div>
-  </script>
+    <script type="text/javascript" src="assets/js/index.js">
+    </script>
+    <div id="console"></div>
+    </script>
 
 
     <div id="displayText">hachikohax@technovoid:~><span class="green-text">$</span> <span class="white-text">cat babycathax.png</span></div>
     <div id="fileDisplay"></div>
 
-<script>
-    const displayTextElement = document.getElementById('displayText');
-    const fileDisplayElement = document.getElementById('fileDisplay');
+    <script>
+        const displayTextElement = document.getElementById('displayText');
+        const fileDisplayElement = document.getElementById('fileDisplay');
 
-    // Function to display the text and load the file
-    function displayTextAndLoadFile() {
-        displayTextElement.style.display = 'none'; // Hide the initial text
+        // Initialize a flag to control the execution of handleUserAction
+        let allowUserAction = false;
 
-        // Load the "babycat.html" file
-        fetch('babycat.html')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Failed to load the file');
-                }
-                return response.text();
-            })
-            .then(fileText => {
-                // Display the file contents in the fileDisplayElement
-                fileDisplayElement.innerHTML = fileText;
-            })
-            .catch(error => {
-                console.error(error);
-                fileDisplayElement.innerHTML = 'Error loading the file.';
-            });
-    }
+        // Function to display the text and load the file
+        function displayTextAndLoadFile() {
+            displayTextElement.style.display = 'none'; // Hide the initial text
 
-    // Function to handle user action (touch or Enter key)
-    function handleUserAction() {
-        displayTextAndLoadFile();
-    }
+            // Load the "babycat.html" file
+            fetch('babycat.html')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to load the file');
+                    }
+                    return response.text();
+                })
+                .then(fileText => {
+                    // Display the file contents in the fileDisplayElement
+                    fileDisplayElement.innerHTML = fileText;
 
-    // Add an event listener to the entire document for Enter key press
-    document.addEventListener('keydown', (event) => {
-        // Check if the Enter key (keyCode 13) is pressed
-        if (event.keyCode === 13) {
-            handleUserAction();
+                    // Set the flag to allow user action after text loads
+                    allowUserAction = true;
+
+                    // Add event listeners for touch events and Enter key
+                    document.addEventListener("touchstart", handleUserAction);
+                    ontouchstart = handleUserAction;
+                    document.addEventListener('keydown', (event) => {
+                        if (event.keyCode === 13) { // Enter key
+                            handleUserAction();
+                        }
+                    });
+                })
+                .catch(error => {
+                    console.error(error);
+                    fileDisplayElement.innerHTML = 'Error loading the file.';
+                });
         }
-    });
 
-    // Add event listeners for touch events
-    document.addEventListener("touchstart", (event) => {
-        handleUserAction();
-    });
+        // Function to handle user action (touch or Enter key)
+        function handleUserAction() {
+            // Check if the flag allows user action
+            if (allowUserAction) {
+                displayTextAndLoadFile();
+            }
+        }
 
-    ontouchstart = (event) => {
-        handleUserAction();
-    };
-</script>
+        // Delay the execution of displayTextAndLoadFile by 11.5 seconds (11500 milliseconds)
+        setTimeout(() => {
+            handleUserAction(); // Trigger the action after the delay
+        }, 11500); // Adjust the delay time as needed
+    </script>
 </body>
+
 </html>
